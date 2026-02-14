@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>上传画作/图纸</title>
+<style>
+body{max-width:600px;margin:30px auto;background:#fdfaff;color:#333}
+.box{padding:20px;background:#fff;border-radius:12px}
+input,textarea,select,button{width:100%;margin:8px 0;padding:10px;border:1px solid #ddd;border-radius:6px}
+button{background:#7e57c2;color:white}
+#preview{min-height:100px;border:1px dashed #ccc;padding:10px}
+</style>
+<div class="box">
+  <h3>🎨 二次元图纸上传</h3>
+  <div id="preview"></div>
+  <input type="file" id="file" accept="image/*,.psd,.zip">
+  <input type="text" id="title" placeholder="作品标题">
+  <select id="category">
+    <option value="原画">原画</option>
+    <option value="人设">人设</option>
+    <option value="场景">场景</option>
+    <option value="图纸">图纸/线稿</option>
+  </select>
+  <input type="text" id="tags" placeholder="标签">
+  <button onclick="upload()">上传作品</button>
+</div>
+<script>
+document.getElementById('file').addEventListener('change',e=>{
+  const f = e.target.files[0]
+  if(f.type.startsWith('image/')){
+    preview.innerHTML = `<img src="${URL.createObjectURL(f)}" style="max-width:100%">`
+  }else{
+    preview.innerText = "已选："+f.name
+  }
+})
+async function upload(){
+  const fd = new FormData()
+  fd.append('file', file.files[0])
+  fd.append('title', title.value)
+  fd.append('category', category.value)
+  const res = await fetch('/api/upload',{method:'POST',body:fd})
+  const data = await res.json()
+  alert(data.msg)
+}
+</script>
