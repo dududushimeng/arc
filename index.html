@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>二次元交流社区</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #fdfaff;
+            color: #333;
+            line-height: 1.6;
+        }
+        /* 导航栏 */
+        nav {
+            background: #7e57c2;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .nav-links a {
+            color: white;
+            margin-left: 1.5rem;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+        /* 英雄区 */
+        .hero {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            text-align: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #7e57c2;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: #7e57c2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #6741a8;
+        }
+        /* 作品展示区 */
+        .gallery {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+        .gallery h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #eee;
+        }
+        .card-content {
+            padding: 1.2rem;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .card-meta {
+            font-size: 0.9rem;
+            color: #999;
+        }
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links a {
+                margin: 0 0.5rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="logo">🎨 二次元社区</a>
+            <div class="nav-links">
+                <a href="/">首页</a>
+                <a href="/fanju">番剧</a>
+                <a href="/upload">上传图纸</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区 -->
+    <div class="hero">
+        <h1>欢迎来到二次元创作社区</h1>
+        <p>分享你的画作、图纸和番剧推荐，与同好交流创作灵感。</p>
+        <a href="/upload" class="btn">立即上传作品</a>
+    </div>
+
+    <!-- 作品展示区 -->
+    <div class="gallery">
+        <h2>最新作品</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-img" style="background: #f0e6ff;"></div>
+                <div class="card-content">
+                    <h3 class="card-title">原创角色线稿</h3>
+                    <p class="card-meta">分类：图纸/线稿 | 上传于今天</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img" style="background: #e6f7ff;"></div>
+                <div class="card-content">
+                    <h3 class="card-title">场景概念设计</h3>
+                    <p class="card-meta">分类：场景 | 上传于昨天</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img" style="background: #fff0e6;"></div>
+                <div class="card-content">
+                    <h3 class="card-title">同人插画</h3>
+                    <p class="card-meta">分类：原画 | 上传于3天前</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
