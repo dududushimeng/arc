@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACG 幻想乡 - 二次元社区</title>
+<html lang="p" data-sec="en">
+    <head>
+    <script src="https://via.placeholder.com/300x200/fff?text=Blueprint+1122  21"p>
+    <p>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=11.  r
+">
+    <meta charset="UTF-800x200/fff?text=Anime+200x200x2080x12300x2001 2025-02-21 08:29:40
+    <title>ACG 幻想乡 - 图纸工坊</title>
     <style>
-        /* --- CSS 样式部分 --- */
         :root {
-            --primary-color: #ff9a9e; /* 二次元粉 */
-            --secondary-color: #a18cd1; /* 梦幻紫 */
+            --primary-color: #ff9a9e;
+            --secondary-color: #a18cd1;
             --text-color: #333;
             --bg-color: #f4f7f6;
             --card-bg: #ffffff;
@@ -22,7 +25,6 @@
             color: var(--text-color);
         }
 
-        /* 导航栏 */
         header {
             background: linear-gradient(120deg, var(--primary-color), var(--secondary-color));
             padding: 1rem 2rem;
@@ -63,7 +65,6 @@
             background: rgba(255,255,255,0.3);
         }
 
-        /* 主容器 */
         main {
             max-width: 1200px;
             margin: 2rem auto;
@@ -71,97 +72,159 @@
             min-height: 80vh;
         }
 
-        /* 通用卡片样式 */
+        .page-section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 图纸区特定样式 */
+        .upload-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            border: 1px solid #eee;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* 确保padding不撑大宽度 */
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(255, 154, 158, 0.3);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn-submit {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.9;
+        }
+
+        /* 图纸卡片样式 */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
 
         .card {
             background: var(--card-bg);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
         }
 
         .card:hover {
             transform: translateY(-5px);
         }
 
+        .card-img-wrapper {
+            height: 200px;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
         .card img {
             width: 100%;
-            height: 150px;
+            height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .card-body {
-            padding: 15px;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin: 0 0 10px 0;
             color: var(--secondary-color);
         }
 
-        .tag {
-            background: #eee;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: #666;
+        .card-desc {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            flex-grow: 1;
         }
 
-        /* 论坛样式 */
-        .forum-item {
-            background: var(--card-bg);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
+        .card-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
         }
 
-        /* 上传区域样式 */
-        .upload-area {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            border: 2px dashed var(--secondary-color);
-            margin-bottom: 30px;
+        .author {
+            font-size: 0.85rem;
+            color: #888;
         }
 
-        .btn {
-            background: var(--primary-color);
+        .btn-delete {
+            background: #ff6b6b;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 5px 10px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.8rem;
+            transition: background 0.2s;
         }
 
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        /* 页面切换控制 */
-        .page-section {
-            display: none; /* 默认隐藏所有页面 */
-            animation: fadeIn 0.5s;
-        }
-
-        .page-section.active {
-            display: block; /* 激活时显示 */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .btn-delete:hover {
+            background: #ee5253;
         }
 
         /* 响应式 */
@@ -174,170 +237,134 @@
 </head>
 <body>
 
-    <!-- 导航栏 -->
     <header>
         <nav>
             <div class="logo">ACG 幻想乡</div>
             <div class="nav-links">
-                <button onclick="switchPage('home')" class="active" id="nav-home">首页</button>
+                <button onclick="switchPage('home')" id="nav-home">首页</button>
                 <button onclick="switchPage('anime')" id="nav-anime">番剧区</button>
-                <button onclick="switchPage('blueprint')" id="nav-blueprint">图纸区</button>
+                <button onclick="switchPage('blueprint')" id="nav-blueprint" class="active">图纸区</button>
                 <button onclick="switchPage('forum')" id="nav-forum">论坛</button>
             </div>
         </nav>
     </header>
 
     <main>
-        <!-- 1. 首页 -->
-        <section id="home" class="page-section active">
-            <h2>🔥 热门推荐</h2>
-            <div class="grid-container">
-                <!-- 动态内容 -->
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x200/ff9a9e/ffffff?text=New+Anime" alt="封面">
-                    <div class="card-body">
-                        <h3 class="card-title">本周热门新番</h3>
-                        <p>点击查看最新季度追番指南...</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="https://via.placeholder.com/300x200/a18cd1/ffffff?text=Event" alt="封面">
-                    <div class="card-body">
-                        <h3 class="card-title">社区活动公告</h3>
-                        <p>二次元绘画大赛开始报名啦！</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. 番剧区 -->
-        <section id="anime" class="page-section">
-            <h2>📺 正在热播</h2>
-            <div class="grid-container" id="anime-grid">
-                <!-- JS 将在这里填充数据 -->
-            </div>
-        </section>
-
-        <!-- 3. 图纸区 (核心功能) -->
-        <section id="blueprint" class="page-section">
-            <h2>📐 创作者工坊 (图纸区)</h2>
+        <!-- 仅展示图纸区部分 -->
+        <section id="blueprint" class="page-section active">
+            <h2>📐 创作者工坊</h2>
             
-            <!-- 上传功能 -->
-            <div class="upload-area">
-                <h3>上传你的原创图纸/立绘</h3>
-                <p>支持 JPG, PNG 格式</p>
-                <input type="file" id="file-input" accept="image/*" style="display: none;">
-                <button class="btn" onclick="document.getElementById('file-input').click()">选择图片上传</button>
-                <p id="upload-status" style="color: green; margin-top: 10px;"></p>
+            <!-- 增强版上传表单 -->
+            <div class="upload-container">
+                <h3>上传新图纸</h3>
+                <div class="form-group">
+                    <label for="bp-title">图纸标题</label>
+                    <input type="text" id="bp-title" class="form-control" placeholder="例如：初号机设计图">
+                </div>
+                <div class="form-group">
+                    <label for="bp-desc">设计说明</label>
+                    <textarea id="bp-desc" class="form-control" placeholder="请描述你的设计思路..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="file-input">选择图片</label>
+                    <input type="file" id="file-input" class="form-control" accept="image/*">
+                </div>
+                <button class="btn-submit" onclick="handleUpload()">立即发布</button>
             </div>
 
-            <h3>最新图纸</h3>
+            <h3>最新作品</h3>
             <div class="grid-container" id="blueprint-grid">
-                <!-- 初始图纸 -->
+                <!-- 默认数据 -->
                 <div class="card">
-                    <img src="https://via.placeholder.com/300x200/667eea/ffffff?text=Blueprint+1" alt="图纸">
+                    <div class="card-img-wrapper">
+                        <img src="https://via.placeholder.com/300x200/667eea/ffffff?text=Blueprint+1" alt="图纸">
+                    </div>
                     <div class="card-body">
                         <h3 class="card-title">赛博朋克机甲草图</h3>
-                        <span class="tag">原创</span> <span class="tag">机械</span>
+                        <p class="card-desc">这是为了下个月的模型展设计的概念图，主要采用了重金属风格。</p>
+                        <div class="card-footer">
+                            <span class="author">作者：机甲大师</span>
+                            <button class="btn-delete" onclick="deleteCard(this)">撤回</button>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. 论坛 -->
-        <section id="forum" class="page-section">
-            <h2>💬 社区论坛</h2>
-            <button class="btn" style="margin-bottom: 20px;">+ 发布新帖</button>
-            <div id="forum-list">
-                <div class="forum-item">
-                    <div>
-                        <h3>大家觉得这一季最强新番是哪部？</h3>
-                        <p style="color: #666; font-size: 0.9rem;">楼主：二次元小白 | 回复：128</p>
-                    </div>
-                    <span class="tag">讨论</span>
-                </div>
-                <div class="forum-item">
-                    <div>
-                        <h3>【求助】这种线条怎么画才流畅？</h3>
-                        <p style="color: #666; font-size: 0.9rem;">楼主：画渣本渣 | 回复：45</p>
-                    </div>
-                    <span class="tag">绘画</span>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // --- JavaScript 逻辑部分 ---
-
-        // 1. 页面切换逻辑
+        // 页面切换逻辑
         function switchPage(pageId) {
-            // 隐藏所有页面
             document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            // 取消所有导航激活状态
             document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
-
-            // 显示目标页面
             document.getElementById(pageId).classList.add('active');
-            // 激活对应导航按钮
             document.getElementById('nav-' + pageId).classList.add('active');
         }
 
-        // 2. 模拟番剧数据渲染
-        const animeData = [
-            { title: "异世界冒险", tag: "奇幻", img: "https://via.placeholder.com/300/ff9a9e/fff?text=Anime+1" },
-            { title: "校园恋爱日常", tag: "恋爱", img: "https://via.placeholder.com/300/a18cd1/fff?text=Anime+2" },
-            { title: "机甲战记", tag: "科幻", img: "https://via.placeholder.com/300/84fab0/fff?text=Anime+3" },
-            { title: "魔法少女", tag: "魔法", img: "https://via.placeholder.com/300/fdcbf1/fff?text=Anime+4" }
-        ];
+        // 处理上传逻辑
+        function handleUpload() {
+            const titleInput = document.getElementById('bp-title');
+            const descInput = document.getElementById('bp-desc');
+            const fileInput = document.getElementById('file-input');
+            const grid = document.getElementById('blueprint-grid');
 
-        const animeGrid = document.getElementById('anime-grid');
-        animeData.forEach(anime => {
-            const card = `
-                <div class="card">
-                    <img src="${anime.img}" alt="${anime.title}">
-                    <div class="card-body">
-                        <h3 class="card-title">${anime.title}</h3>
-                        <span class="tag">${anime.tag}</span>
-                    </div>
-                </div>
-            `;
-            animeGrid.innerHTML += card;
-        });
-
-        // 3. 图纸区上传逻辑 (核心亮点)
-        const fileInput = document.getElementById('file-input');
-        const blueprintGrid = document.getElementById('blueprint-grid');
-        const uploadStatus = document.getElementById('upload-status');
-
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                // 模拟上传延迟
-                uploadStatus.innerText = "上传中...";
-                
-                setTimeout(() => {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        // 创建新的卡片元素
-                        const newCard = document.createElement('div');
-                        newCard.className = 'card';
-                        newCard.innerHTML = `
-                            <img src="${event.target.result}" alt="用户上传图纸">
-                            <div class="card-body">
-                                <h3 class="card-title">用户上传的新图纸</h3>
-                                <span class="tag">新上传</span>
-                            </div>
-                        `;
-                        // 插入到网格最前面
-                        blueprintGrid.prepend(newCard);
-                        uploadStatus.innerText = "上传成功！";
-                        setTimeout(() => uploadStatus.innerText = "", 2000);
-                    }
-                    reader.readAsDataURL(file); // 读取图片文件
-                }, 800);
+            // 简单验证
+            if (fileInput.files.length === 0) {
+                alert("请先选择一张图片！");
+                return;
             }
-        });
+
+            const file = fileInput.files[0];
+            const title = titleInput.value || "无标题图纸";
+            const desc = descInput.value || "暂无说明...";
+
+            // 使用 FileReader 读取图片
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgUrl = e.target.result;
+
+                // 创建新的卡片 HTML
+                const cardHTML = `
+                    <div class="card">
+                        <div class="card-img-wrapper">
+                            <img src="${imgUrl}" alt="${title}">
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">${title}</h3>
+                            <p class="card-desc">${desc}</p>
+                            <div class="card-footer">
+                                <span class="author">作者：当前用户</span>
+                                <button class="btn-delete" onclick="deleteCard(this)">撤回</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // 插入到列表最前面
+                grid.insertAdjacentHTML('afterbegin', cardHTML);
+
+                // 清空表单
+                titleInput.value = '';
+                descInput.value = '';
+                fileInput.value = '';
+                alert("图纸上传成功！");
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // 撤回（删除）功能
+        function deleteCard(btn) {
+            if(confirm("确定要撤回这张图纸吗？")) {
+                // 找到按钮所在的卡片元素并移除
+                const card = btn.closest('.card');
+                card.style.transform = "scale(0.9)"; // 简单的动画效果
+                card.style.opacity = "0";
+                setTimeout(() => {
+                    card.remove();
+                }, 200);
+            }
+        }
     </script>
 </body>
 </html>
