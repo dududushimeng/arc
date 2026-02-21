@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef } from "react";
 
 interface Blueprint {
   id: number;
@@ -8,101 +8,112 @@ interface Blueprint {
   author: string;
 }
 
-export default function App() {
-  const [currentPage, setCurrentPage] = useState('blueprint');
+export function App() {
+  const [activePage, setActivePage] = useState("blueprint");
   const [blueprints, setBlueprints] = useState<Blueprint[]>([
     {
       id: 1,
-      title: '赛博朋克机甲草图',
-      desc: '这是为了下个月的模型展设计的概念图，主要采用了重金属风格。',
-      imageUrl: 'https://via.placeholder.com/300x200/667eea/ffffff?text=Blueprint+1',
-      author: '机甲大师'
-    }
+      title: "赛博朋克机甲草图",
+      desc: "这是为了下个月的模型展设计的概念图，主要采用了重金属风格。",
+      imageUrl: "https://via.placeholder.com/300x200/667eea/ffffff?text=Blueprint+1",
+      author: "机甲大师",
+    },
   ]);
-  
-  const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handlePageSwitch = (pageId: string) => {
-    setCurrentPage(pageId);
-  };
-
   const handleUpload = () => {
-    if (!selectedFile) {
-      alert('请先选择一张图片！');
+    if (!fileInputRef.current?.files || fileInputRef.current.files.length === 0) {
+      alert("请先选择一张图片！");
       return;
     }
 
+    const file = fileInputRef.current.files[0];
     const reader = new FileReader();
+    
     reader.onload = (e) => {
       const newBlueprint: Blueprint = {
         id: Date.now(),
-        title: title || '无标题图纸',
-        desc: desc || '暂无说明...',
+        title: title || "无标题图纸",
+        desc: desc || "暂无说明...",
         imageUrl: e.target?.result as string,
-        author: '当前用户'
+        author: "当前用户",
       };
       
-      setBlueprints(prev => [newBlueprint, ...prev]);
-      setTitle('');
-      setDesc('');
-      setSelectedFile(null);
+      setBlueprints([newBlueprint, ...blueprints]);
+      setTitle("");
+      setDesc("");
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
-      alert('图纸上传成功！');
+      alert("图纸上传成功！");
     };
-    reader.readAsDataURL(selectedFile);
+    
+    reader.readAsDataURL(file);
   };
 
-  const handleDelete = (id: number) => {
-    if (confirm('确定要撤回这张图纸吗？')) {
-      setBlueprints(prev => prev.filter(bp => bp.id !== id));
+  const deleteCard = (id: number) => {
+    if (confirm("确定要撤回这张图纸吗？")) {
+      setBlueprints(blueprints.filter((bp) => bp.id !== id));
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
+  const switchPage = (pageId: string) => {
+    setActivePage(pageId);
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#f4f7f6', color: '#333', fontFamily: "'Microsoft YaHei', sans-serif" }}>
+    <div 
+      className="min-h-screen" 
+      style={{ 
+        backgroundColor: "#f4f7f6", 
+        color: "#333", 
+        fontFamily: "'Microsoft YaHei', sans-serif" 
+      }}
+    >
       {/* Header */}
-      <header style={{ 
-        background: 'linear-gradient(120deg, #ff9a9e, #a18cd1)', 
-        padding: '1rem 2rem', 
-        boxShadow: '0 4px 6px rgba(0,0,0,0.1)', 
-        position: 'sticky', 
-        top: 0, 
-        zIndex: 100 
-      }}>
-        <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 1200, margin: '0 auto' }}>
-          <div className="logo" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', cursor: 'pointer' }}>
+      <header 
+        style={{ 
+          background: "linear-gradient(120deg, #ff9a9e, #a18cd1)", 
+          padding: "1rem 2rem", 
+          boxShadow: "0 4px 6px rgba(0,0,0,0.1)", 
+          position: "sticky", 
+          top: 0, 
+          zIndex: 100 
+        }}
+      >
+        <nav 
+          style={{ 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center", 
+            maxWidth: 1200, 
+            margin: "0 auto" 
+          }}
+        >
+          <div className="logo" style={{ fontSize: "1.5rem", fontWeight: "bold", color: "white", cursor: "pointer" }}>
             ACG 幻想乡
           </div>
-          <div className="nav-links" style={{ display: 'flex', gap: '20px' }}>
-            {['home', 'anime', 'blueprint', 'forum'].map((page) => (
+          <div className="nav-links" style={{ display: "flex", gap: "20px" }}>
+            {["home", "anime", "blueprint", "forum"].map((page) => (
               <button
                 key={page}
-                onClick={() => handlePageSwitch(page)}
+                onClick={() => switchPage(page)}
                 id={`nav-${page}`}
-                className={`nav-btn ${currentPage === page ? 'active' : ''}`}
+                className={`nav-btn ${activePage === page ? "active" : ""}`}
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'white',
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                  padding: '5px 10px',
-                  borderRadius: '5px',
-                  transition: 'background 0.3s'
+                  background: "none",
+                  border: "none",
+                  color: "white",
+                  fontSize: "1rem",
+                  cursor: "pointer",
+                  padding: "5px 10px",
+                  borderRadius: "5px",
+                  transition: "background 0.3s",
                 }}
               >
-                {page === 'home' ? '首页' : page === 'anime' ? '番剧区' : page === 'blueprint' ? '图纸区' : '论坛'}
+                {page === "home" ? "首页" : page === "anime" ? "番剧区" : page === "blueprint" ? "图纸区" : "论坛"}
               </button>
             ))}
           </div>
@@ -110,202 +121,284 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main style={{ maxWidth: 1200, margin: '2rem auto', padding: '0 1rem', minHeight: '80vh' }}>
+      <main 
+        style={{ 
+          maxWidth: 1200, 
+          margin: "2rem auto", 
+          padding: "0 1rem", 
+          minHeight: "80vh" 
+        }}
+      >
         {/* Blueprint Section */}
-        {currentPage === 'blueprint' && (
-          <div className="page-section" style={{ animation: 'fadeIn 0.5s' }}>
-            <h2 style={{ marginBottom: '2rem' }}>📐 创作者工坊</h2>
-            
-            {/* Upload Form */}
-            <div style={{ 
-              background: '#fff', 
-              padding: '30px', 
-              borderRadius: '10px', 
-              boxShadow: '0 4px 15px rgba(0,0,0,0.05)', 
-              marginBottom: '40px',
-              border: '1px solid #eee'
-            }}>
-              <h3>上传新图纸</h3>
-              <div className="form-group" style={{ marginBottom: '15px' }}>
-                <label htmlFor="bp-title" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#a18cd1' }}>
-                  图纸标题
-                </label>
-                <input
-                  type="text"
-                  id="bp-title"
-                  className="form-control"
-                  placeholder="例如：初号机设计图"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    border: '1px solid #ddd',
-                    borderRadius: '5px',
-                    boxSizing: 'border-box',
-                    fontSize: '1rem'
-                  }}
-                />
-              </div>
-              <div className="form-group" style={{ marginBottom: '15px' }}>
-                <label htmlFor="bp-desc" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#a18cd1' }}>
-                  设计说明
-                </label>
-                <textarea
-                  id="bp-desc"
-                  className="form-control"
-                  placeholder="请描述你的设计思路..."
-                  value={desc}
-                  onChange={(e) => setDesc(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    border: '1px solid #ddd',
-                    borderRadius: '5px',
-                    boxSizing: 'border-box',
-                    fontSize: '1rem',
-                    minHeight: '80px',
-                    resize: 'vertical'
-                  }}
-                />
-              </div>
-              <div className="form-group" style={{ marginBottom: '15px' }}>
-                <label htmlFor="file-input" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#a18cd1' }}>
-                  选择图片
-                </label>
-                <input
-                  type="file"
-                  id="file-input"
-                  ref={fileInputRef}
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="form-control"
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    border: '1px solid #ddd',
-                    borderRadius: '5px',
-                    boxSizing: 'border-box',
-                    fontSize: '1rem'
-                  }}
-                />
-              </div>
-              <button
-                className="btn-submit"
-                onClick={handleUpload}
-                style={{
-                  background: '#ff9a9e',
-                  color: 'white',
-                  border: 'none',
-                  padding: '12px 30px',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  fontSize: '1rem',
-                  width: '100%',
-                  transition: 'opacity 0.2s'
+        <section 
+          id="blueprint" 
+          className={`page-section ${activePage === "blueprint" ? "active" : ""}`}
+          style={{ display: activePage === "blueprint" ? "block" : "none" }}
+        >
+          <h2 style={{ marginBottom: "2rem" }}>📐 创作者工坊</h2>
+          
+          {/* Upload Form */}
+          <div 
+            className="upload-container" 
+            style={{ 
+              background: "#fff", 
+              padding: "30px", 
+              borderRadius: "10px", 
+              boxShadow: "0 4px 15px rgba(0,0,0,0.05)", 
+              marginBottom: "40px", 
+              border: "1px solid #eee" 
+            }}
+          >
+            <h3 style={{ marginBottom: "20px" }}>上传新图纸</h3>
+            <div className="form-group" style={{ marginBottom: "15px" }}>
+              <label 
+                htmlFor="bp-title" 
+                style={{ 
+                  display: "block", 
+                  marginBottom: "5px", 
+                  fontWeight: "bold", 
+                  color: "#a18cd1" 
                 }}
               >
-                立即发布
-              </button>
+                图纸标题
+              </label>
+              <input
+                type="text"
+                id="bp-title"
+                className="form-control"
+                placeholder="例如：初号机设计图"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={{ 
+                  width: "100%", 
+                  padding: "10px", 
+                  border: "1px solid #ddd", 
+                  borderRadius: "5px", 
+                  boxSizing: "border-box", 
+                  fontSize: "1rem" 
+                }}
+              />
             </div>
+            <div className="form-group" style={{ marginBottom: "15px" }}>
+              <label 
+                htmlFor="bp-desc" 
+                style={{ 
+                  display: "block", 
+                  marginBottom: "5px", 
+                  fontWeight: "bold", 
+                  color: "#a18cd1" 
+                }}
+              >
+                设计说明
+              </label>
+              <textarea
+                id="bp-desc"
+                className="form-control"
+                placeholder="请描述你的设计思路..."
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
+                style={{ 
+                  width: "100%", 
+                  padding: "10px", 
+                  border: "1px solid #ddd", 
+                  borderRadius: "5px", 
+                  boxSizing: "border-box", 
+                  fontSize: "1rem", 
+                  minHeight: "80px", 
+                  resize: "vertical" 
+                }}
+              />
+            </div>
+            <div className="form-group" style={{ marginBottom: "15px" }}>
+              <label 
+                htmlFor="file-input" 
+                style={{ 
+                  display: "block", 
+                  marginBottom: "5px", 
+                  fontWeight: "bold", 
+                  color: "#a18cd1" 
+                }}
+              >
+                选择图片
+              </label>
+              <input
+                type="file"
+                id="file-input"
+                ref={fileInputRef}
+                accept="image/*"
+                className="form-control"
+                style={{ 
+                  width: "100%", 
+                  padding: "10px", 
+                  border: "1px solid #ddd", 
+                  borderRadius: "5px", 
+                  boxSizing: "border-box", 
+                  fontSize: "1rem" 
+                }}
+              />
+            </div>
+            <button
+              className="btn-submit"
+              onClick={handleUpload}
+              style={{ 
+                background: "#ff9a9e", 
+                color: "white", 
+                border: "none", 
+                padding: "12px 30px", 
+                borderRadius: "5px", 
+                cursor: "pointer", 
+                fontSize: "1rem", 
+                width: "100%", 
+                transition: "opacity 0.2s" 
+              }}
+            >
+              立即发布
+            </button>
+          </div>
 
-            <h3>最新作品</h3>
-            <div className="grid-container" style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
-              gap: '25px' 
-            }}>
-              {blueprints.map((bp) => (
-                <div key={bp.id} className="card" style={{ 
-                  background: '#ffffff', 
-                  borderRadius: '10px', 
-                  overflow: 'hidden', 
-                  boxShadow: '0 4px 10px rgba(0,0,0,0.08)', 
-                  transition: 'transform 0.2s',
-                  display: 'flex',
-                  flexDirection: 'column'
-                }}>
-                  <div className="card-img-wrapper" style={{ height: '200px', overflow: 'hidden', background: '#f0f0f0' }}>
-                    <img 
-                      src={bp.imageUrl} 
-                      alt={bp.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                    />
-                  </div>
-                  <div className="card-body" style={{ padding: '20px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <h3 className="card-title" style={{ fontSize: '1.2rem', margin: '0 0 10px 0', color: '#a18cd1' }}>
-                      {bp.title}
-                    </h3>
-                    <p className="card-desc" style={{ fontSize: '0.95rem', color: '#555', marginBottom: '15px', lineHeight: '1.5', flexGrow: 1 }}>
-                      {bp.desc}
-                    </p>
-                    <div className="card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '15px', borderTop: '1px solid #eee' }}>
-                      <span className="author" style={{ fontSize: '0.85rem', color: '#888' }}>
-                        作者：{bp.author}
-                      </span>
-                      <button
-                        className="btn-delete"
-                        onClick={() => handleDelete(bp.id)}
-                        style={{
-                          background: '#ff6b6b',
-                          color: 'white',
-                          border: 'none',
-                          padding: '5px 10px',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          fontSize: '0.8rem',
-                          transition: 'background 0.2s'
-                        }}
-                      >
-                        撤回
-                      </button>
-                    </div>
+          <h3 style={{ marginBottom: "20px" }}>最新作品</h3>
+          <div 
+            className="grid-container" 
+            style={{ 
+              display: "grid", 
+              gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+              gap: "25px" 
+            }}
+          >
+            {blueprints.map((bp) => (
+              <div 
+                key={bp.id} 
+                className="card" 
+                style={{ 
+                  background: "#ffffff", 
+                  borderRadius: "10px", 
+                  overflow: "hidden", 
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.08)", 
+                  transition: "transform 0.2s" 
+                }}
+              >
+                <div 
+                  className="card-img-wrapper" 
+                  style={{ 
+                    height: "200px", 
+                    overflow: "hidden", 
+                    background: "#f0f0f0" 
+                  }}
+                >
+                  <img 
+                    src={bp.imageUrl} 
+                    alt={bp.title} 
+                    style={{ 
+                      width: "100%", 
+                      height: "100%", 
+                      objectFit: "cover", 
+                      display: "block" 
+                    }} 
+                  />
+                </div>
+                <div 
+                  className="card-body" 
+                  style={{ 
+                    padding: "20px", 
+                    display: "flex", 
+                    flexDirection: "column" 
+                  }}
+                >
+                  <h3 
+                    className="card-title" 
+                    style={{ 
+                      fontSize: "1.2rem", 
+                      margin: "0 0 10px 0", 
+                      color: "#a18cd1" 
+                    }}
+                  >
+                    {bp.title}
+                  </h3>
+                  <p 
+                    className="card-desc" 
+                    style={{ 
+                      fontSize: "0.95rem", 
+                      color: "#555", 
+                      margin: "0 0 15px 0", 
+                      lineHeight: "1.5" 
+                    }}
+                  >
+                    {bp.desc}
+                  </p>
+                  <div 
+                    className="card-footer" 
+                    style={{ 
+                      display: "flex", 
+                      justifyContent: "space-between", 
+                      alignItems: "center", 
+                      marginTop: "auto", 
+                      paddingTop: "15px", 
+                      borderTop: "1px solid #eee" 
+                    }}
+                  >
+                    <span 
+                      className="author" 
+                      style={{ 
+                        fontSize: "0.85rem", 
+                        color: "#888" 
+                      }}
+                    >
+                      作者：{bp.author}
+                    </span>
+                    <button
+                      className="btn-delete"
+                      onClick={() => deleteCard(bp.id)}
+                      style={{ 
+                        background: "#ff6b6b", 
+                        color: "white", 
+                        border: "none", 
+                        padding: "5px 10px", 
+                        borderRadius: "4px", 
+                        cursor: "pointer", 
+                        fontSize: "0.8rem", 
+                        transition: "background 0.2s" 
+                      }}
+                    >
+                      撤回
+                    </button>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        )}
+        </section>
 
-        {/* Other Pages Placeholder */}
-        {currentPage !== 'blueprint' && (
-          <div className="page-section" style={{ animation: 'fadeIn 0.5s' }}>
+        {/* Other Sections (Placeholder) */}
+        {activePage !== "blueprint" && (
+          <section className="page-section" style={{ display: "block" }}>
             <h2>
-              {currentPage === 'home' && '首页'}
-              {currentPage === 'anime' && '番剧区'}
-              {currentPage === 'forum' && '论坛'}
+              {activePage === "home" && "首页"}
+              {activePage === "anime" && "番剧区"}
+              {activePage === "forum" && "论坛"}
             </h2>
-            <p style={{ color: '#888' }}>该页面正在建设中...</p>
-          </div>
+            <p style={{ color: "#888" }}>该页面正在建设中...</p>
+          </section>
         )}
       </main>
 
       <style>{`
+        .nav-btn:hover, .nav-btn.active {
+          background: rgba(255,255,255,0.3);
+        }
+        
+        .page-section {
+          animation: fadeIn 0.5s;
+        }
+        
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
         }
-        .nav-btn:hover, .nav-btn.active {
-          background: rgba(255,255,255,0.3);
-        }
-        .form-control:focus {
-          outline: none;
-          border-color: #ff9a9e;
-          box-shadow: 0 0 5px rgba(255, 154, 158, 0.3);
-        }
-        .btn-submit:hover {
-          opacity: 0.9;
-        }
-        .card:hover {
-          transform: translateY(-5px);
-        }
-        .btn-delete:hover {
-          background: #ee5253;
-        }
+        
         @media (max-width: 768px) {
           nav { flex-direction: column; }
           .nav-links { margin-top: 15px; }
-          .nav-links button { margin: 0 5px; }
+          .nav-btn { margin: 0 5px; }
         }
       `}</style>
     </div>
