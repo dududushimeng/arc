@@ -1,370 +1,313 @@
-<!DOCTYPE html>
-<html lang="p" data-sec="en">
-    <head>
-    <script src="https://via.placeholder.com/300x200/fff?text=Blueprint+1122  21"p>
-    <p>
-        <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=11.  r
-">
-    <meta charset="UTF-800x200/fff?text=Anime+200x200x2080x12300x2001 2025-02-21 08:29:40
-    <title>ACG 幻想乡 - 图纸工坊</title>
-    <style>
-        :root {
-            --primary-color: #ff9a9e;
-            --secondary-color: #a18cd1;
-            --text-color: #333;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-        }
+import { useState, useRef } from 'react';
 
-        body {
-            font-family: 'Microsoft YaHei', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-        }
+interface Blueprint {
+  id: number;
+  title: string;
+  desc: string;
+  imageUrl: string;
+  author: string;
+}
 
-        header {
-            background: linear-gradient(120deg, var(--primary-color), var(--secondary-color));
-            padding: 1rem 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('blueprint');
+  const [blueprints, setBlueprints] = useState<Blueprint[]>([
+    {
+      id: 1,
+      title: '赛博朋克机甲草图',
+      desc: '这是为了下个月的模型展设计的概念图，主要采用了重金属风格。',
+      imageUrl: 'https://via.placeholder.com/300x200/667eea/ffffff?text=Blueprint+1',
+      author: '机甲大师'
+    }
+  ]);
+  
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+  const handlePageSwitch = (pageId: string) => {
+    setCurrentPage(pageId);
+  };
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: white;
-            cursor: pointer;
-        }
+  const handleUpload = () => {
+    if (!selectedFile) {
+      alert('请先选择一张图片！');
+      return;
+    }
 
-        .nav-links button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            margin-left: 20px;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const newBlueprint: Blueprint = {
+        id: Date.now(),
+        title: title || '无标题图纸',
+        desc: desc || '暂无说明...',
+        imageUrl: e.target?.result as string,
+        author: '当前用户'
+      };
+      
+      setBlueprints(prev => [newBlueprint, ...prev]);
+      setTitle('');
+      setDesc('');
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      alert('图纸上传成功！');
+    };
+    reader.readAsDataURL(selectedFile);
+  };
 
-        .nav-links button:hover, .nav-links button.active {
-            background: rgba(255,255,255,0.3);
-        }
+  const handleDelete = (id: number) => {
+    if (confirm('确定要撤回这张图纸吗？')) {
+      setBlueprints(prev => prev.filter(bp => bp.id !== id));
+    }
+  };
 
-        main {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            min-height: 80vh;
-        }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
 
-        .page-section {
-            display: none;
-            animation: fadeIn 0.5s;
-        }
-
-        .page-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* 图纸区特定样式 */
-        .upload-container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 40px;
-            border: 1px solid #eee;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: var(--secondary-color);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box; /* 确保padding不撑大宽度 */
-            font-size: 1rem;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px rgba(255, 154, 158, 0.3);
-        }
-
-        textarea.form-control {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .btn-submit {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            width: 100%;
-            transition: opacity 0.2s;
-        }
-
-        .btn-submit:hover {
-            opacity: 0.9;
-        }
-
-        /* 图纸卡片样式 */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            transition: transform 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .card-img-wrapper {
-            height: 200px;
-            overflow: hidden;
-            background: #f0f0f0;
-        }
-
-        .card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .card-body {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            margin: 0 0 10px 0;
-            color: var(--secondary-color);
-        }
-
-        .card-desc {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 15px;
-            line-height: 1.5;
-            flex-grow: 1;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-
-        .author {
-            font-size: 0.85rem;
-            color: #888;
-        }
-
-        .btn-delete {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: background 0.2s;
-        }
-
-        .btn-delete:hover {
-            background: #ee5253;
-        }
-
-        /* 响应式 */
-        @media (max-width: 768px) {
-            nav { flex-direction: column; }
-            .nav-links { margin-top: 15px; }
-            .nav-links button { margin: 0 5px; }
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <nav>
-            <div class="logo">ACG 幻想乡</div>
-            <div class="nav-links">
-                <button onclick="switchPage('home')" id="nav-home">首页</button>
-                <button onclick="switchPage('anime')" id="nav-anime">番剧区</button>
-                <button onclick="switchPage('blueprint')" id="nav-blueprint" class="active">图纸区</button>
-                <button onclick="switchPage('forum')" id="nav-forum">论坛</button>
-            </div>
+  return (
+    <div className="min-h-screen" style={{ backgroundColor: '#f4f7f6', color: '#333', fontFamily: "'Microsoft YaHei', sans-serif" }}>
+      {/* Header */}
+      <header style={{ 
+        background: 'linear-gradient(120deg, #ff9a9e, #a18cd1)', 
+        padding: '1rem 2rem', 
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)', 
+        position: 'sticky', 
+        top: 0, 
+        zIndex: 100 
+      }}>
+        <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', maxWidth: 1200, margin: '0 auto' }}>
+          <div className="logo" style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white', cursor: 'pointer' }}>
+            ACG 幻想乡
+          </div>
+          <div className="nav-links" style={{ display: 'flex', gap: '20px' }}>
+            {['home', 'anime', 'blueprint', 'forum'].map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageSwitch(page)}
+                id={`nav-${page}`}
+                className={`nav-btn ${currentPage === page ? 'active' : ''}`}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  padding: '5px 10px',
+                  borderRadius: '5px',
+                  transition: 'background 0.3s'
+                }}
+              >
+                {page === 'home' ? '首页' : page === 'anime' ? '番剧区' : page === 'blueprint' ? '图纸区' : '论坛'}
+              </button>
+            ))}
+          </div>
         </nav>
-    </header>
+      </header>
 
-    <main>
-        <!-- 仅展示图纸区部分 -->
-        <section id="blueprint" class="page-section active">
-            <h2>📐 创作者工坊</h2>
+      {/* Main Content */}
+      <main style={{ maxWidth: 1200, margin: '2rem auto', padding: '0 1rem', minHeight: '80vh' }}>
+        {/* Blueprint Section */}
+        {currentPage === 'blueprint' && (
+          <div className="page-section" style={{ animation: 'fadeIn 0.5s' }}>
+            <h2 style={{ marginBottom: '2rem' }}>📐 创作者工坊</h2>
             
-            <!-- 增强版上传表单 -->
-            <div class="upload-container">
-                <h3>上传新图纸</h3>
-                <div class="form-group">
-                    <label for="bp-title">图纸标题</label>
-                    <input type="text" id="bp-title" class="form-control" placeholder="例如：初号机设计图">
-                </div>
-                <div class="form-group">
-                    <label for="bp-desc">设计说明</label>
-                    <textarea id="bp-desc" class="form-control" placeholder="请描述你的设计思路..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="file-input">选择图片</label>
-                    <input type="file" id="file-input" class="form-control" accept="image/*">
-                </div>
-                <button class="btn-submit" onclick="handleUpload()">立即发布</button>
+            {/* Upload Form */}
+            <div style={{ 
+              background: '#fff', 
+              padding: '30px', 
+              borderRadius: '10px', 
+              boxShadow: '0 4px 15px rgba(0,0,0,0.05)', 
+              marginBottom: '40px',
+              border: '1px solid #eee'
+            }}>
+              <h3>上传新图纸</h3>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="bp-title" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#a18cd1' }}>
+                  图纸标题
+                </label>
+                <input
+                  type="text"
+                  id="bp-title"
+                  className="form-control"
+                  placeholder="例如：初号机设计图"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    border: '1px solid #ddd',
+                    borderRadius: '5px',
+                    boxSizing: 'border-box',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="bp-desc" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#a18cd1' }}>
+                  设计说明
+                </label>
+                <textarea
+                  id="bp-desc"
+                  className="form-control"
+                  placeholder="请描述你的设计思路..."
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    border: '1px solid #ddd',
+                    borderRadius: '5px',
+                    boxSizing: 'border-box',
+                    fontSize: '1rem',
+                    minHeight: '80px',
+                    resize: 'vertical'
+                  }}
+                />
+              </div>
+              <div className="form-group" style={{ marginBottom: '15px' }}>
+                <label htmlFor="file-input" style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold', color: '#a18cd1' }}>
+                  选择图片
+                </label>
+                <input
+                  type="file"
+                  id="file-input"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="form-control"
+                  style={{
+                    width: '100%',
+                    padding: '10px',
+                    border: '1px solid #ddd',
+                    borderRadius: '5px',
+                    boxSizing: 'border-box',
+                    fontSize: '1rem'
+                  }}
+                />
+              </div>
+              <button
+                className="btn-submit"
+                onClick={handleUpload}
+                style={{
+                  background: '#ff9a9e',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 30px',
+                  borderRadius: '5px',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  width: '100%',
+                  transition: 'opacity 0.2s'
+                }}
+              >
+                立即发布
+              </button>
             </div>
 
             <h3>最新作品</h3>
-            <div class="grid-container" id="blueprint-grid">
-                <!-- 默认数据 -->
-                <div class="card">
-                    <div class="card-img-wrapper">
-                        <img src="https://via.placeholder.com/300x200/667eea/ffffff?text=Blueprint+1" alt="图纸">
+            <div className="grid-container" style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+              gap: '25px' 
+            }}>
+              {blueprints.map((bp) => (
+                <div key={bp.id} className="card" style={{ 
+                  background: '#ffffff', 
+                  borderRadius: '10px', 
+                  overflow: 'hidden', 
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.08)', 
+                  transition: 'transform 0.2s',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
+                  <div className="card-img-wrapper" style={{ height: '200px', overflow: 'hidden', background: '#f0f0f0' }}>
+                    <img 
+                      src={bp.imageUrl} 
+                      alt={bp.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                  </div>
+                  <div className="card-body" style={{ padding: '20px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <h3 className="card-title" style={{ fontSize: '1.2rem', margin: '0 0 10px 0', color: '#a18cd1' }}>
+                      {bp.title}
+                    </h3>
+                    <p className="card-desc" style={{ fontSize: '0.95rem', color: '#555', marginBottom: '15px', lineHeight: '1.5', flexGrow: 1 }}>
+                      {bp.desc}
+                    </p>
+                    <div className="card-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '15px', borderTop: '1px solid #eee' }}>
+                      <span className="author" style={{ fontSize: '0.85rem', color: '#888' }}>
+                        作者：{bp.author}
+                      </span>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(bp.id)}
+                        style={{
+                          background: '#ff6b6b',
+                          color: 'white',
+                          border: 'none',
+                          padding: '5px 10px',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '0.8rem',
+                          transition: 'background 0.2s'
+                        }}
+                      >
+                        撤回
+                      </button>
                     </div>
-                    <div class="card-body">
-                        <h3 class="card-title">赛博朋克机甲草图</h3>
-                        <p class="card-desc">这是为了下个月的模型展设计的概念图，主要采用了重金属风格。</p>
-                        <div class="card-footer">
-                            <span class="author">作者：机甲大师</span>
-                            <button class="btn-delete" onclick="deleteCard(this)">撤回</button>
-                        </div>
-                    </div>
+                  </div>
                 </div>
+              ))}
             </div>
-        </section>
-    </main>
+          </div>
+        )}
 
-    <script>
-        // 页面切换逻辑
-        function switchPage(pageId) {
-            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-links button').forEach(el => el.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            document.getElementById('nav-' + pageId).classList.add('active');
+        {/* Other Pages Placeholder */}
+        {currentPage !== 'blueprint' && (
+          <div className="page-section" style={{ animation: 'fadeIn 0.5s' }}>
+            <h2>
+              {currentPage === 'home' && '首页'}
+              {currentPage === 'anime' && '番剧区'}
+              {currentPage === 'forum' && '论坛'}
+            </h2>
+            <p style={{ color: '#888' }}>该页面正在建设中...</p>
+          </div>
+        )}
+      </main>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
-
-        // 处理上传逻辑
-        function handleUpload() {
-            const titleInput = document.getElementById('bp-title');
-            const descInput = document.getElementById('bp-desc');
-            const fileInput = document.getElementById('file-input');
-            const grid = document.getElementById('blueprint-grid');
-
-            // 简单验证
-            if (fileInput.files.length === 0) {
-                alert("请先选择一张图片！");
-                return;
-            }
-
-            const file = fileInput.files[0];
-            const title = titleInput.value || "无标题图纸";
-            const desc = descInput.value || "暂无说明...";
-
-            // 使用 FileReader 读取图片
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgUrl = e.target.result;
-
-                // 创建新的卡片 HTML
-                const cardHTML = `
-                    <div class="card">
-                        <div class="card-img-wrapper">
-                            <img src="${imgUrl}" alt="${title}">
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">${title}</h3>
-                            <p class="card-desc">${desc}</p>
-                            <div class="card-footer">
-                                <span class="author">作者：当前用户</span>
-                                <button class="btn-delete" onclick="deleteCard(this)">撤回</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-
-                // 插入到列表最前面
-                grid.insertAdjacentHTML('afterbegin', cardHTML);
-
-                // 清空表单
-                titleInput.value = '';
-                descInput.value = '';
-                fileInput.value = '';
-                alert("图纸上传成功！");
-            };
-
-            reader.readAsDataURL(file);
+        .nav-btn:hover, .nav-btn.active {
+          background: rgba(255,255,255,0.3);
         }
-
-        // 撤回（删除）功能
-        function deleteCard(btn) {
-            if(confirm("确定要撤回这张图纸吗？")) {
-                // 找到按钮所在的卡片元素并移除
-                const card = btn.closest('.card');
-                card.style.transform = "scale(0.9)"; // 简单的动画效果
-                card.style.opacity = "0";
-                setTimeout(() => {
-                    card.remove();
-                }, 200);
-            }
+        .form-control:focus {
+          outline: none;
+          border-color: #ff9a9e;
+          box-shadow: 0 0 5px rgba(255, 154, 158, 0.3);
         }
-    </script>
-</body>
-</html>
+        .btn-submit:hover {
+          opacity: 0.9;
+        }
+        .card:hover {
+          transform: translateY(-5px);
+        }
+        .btn-delete:hover {
+          background: #ee5253;
+        }
+        @media (max-width: 768px) {
+          nav { flex-direction: column; }
+          .nav-links { margin-top: 15px; }
+          .nav-links button { margin: 0 5px; }
+        }
+      `}</style>
+    </div>
+  );
+}
